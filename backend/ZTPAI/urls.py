@@ -24,7 +24,7 @@ urlpatterns = [
     path('api_test/', api_test, name='api_test'),
     path('api_login/', LoginView.as_view(), name='login_api'),
     path('login/', login_page, name='login_page'),
-    re_path(r'^.*$', TemplateView.as_view(template_name="index.html"), name='index')
+   # re_path(r'^.*$', TemplateView.as_view(template_name="index.html"), name='index')
 
 ]
 
