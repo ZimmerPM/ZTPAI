@@ -3,7 +3,7 @@ import axios from 'axios';
 import '../css/style.css';
 import '../css/table-styles.css';
 import '../css/modal-styles.css';
-import Header from './Header'; // Zakładając, że komponent nagłówka nazywa się Header i został odpowiednio zaimplementowany
+import Header from './Header';
 
 function Catalog() {
     const [books, setBooks] = useState([]);
@@ -14,7 +14,7 @@ function Catalog() {
     useEffect(() => {
         const fetchBooks = async () => {
             try {
-                const response = await axios.get('/api/books');
+                const response = await axios.get('http://localhost:8000/app/books/');
                 setBooks(response.data || []);
             } catch (error) {
                 console.error('Error fetching books', error);
@@ -25,7 +25,7 @@ function Catalog() {
     }, []);
 
     const handleSearch = () => {
-        // Implement search functionality or filter `books` state based on `searchTerm`
+        // Implementacja funkcji wyszukiwania
     };
 
     const handleReserve = (book) => {
@@ -34,7 +34,7 @@ function Catalog() {
     };
 
     const confirmReserve = async () => {
-        // Send reservation request to the server
+        // Wysłanie żądania rezerwacji do serwera
         setModalVisible(false);
     };
 
@@ -67,7 +67,6 @@ function Catalog() {
                             <th>Gatunek</th>
                             <th>Dostępność</th>
                             <th>Liczba dostępnych egzemplarzy</th>
-                            {/* Render if user is logged in */}
                             <th>Akcja</th>
                         </tr>
                     </thead>
@@ -85,16 +84,15 @@ function Catalog() {
                                 <tr>
                                     <td>{book.title}</td>
                                     <td>{book.author}</td>
-                                    <td>{book.publicationYear}</td>
+                                    <td>{book.publication_year}</td>
                                     <td>{book.genre}</td>
-                                    <td>{book.isAvailable ? 'Dostępna' : 'Niedostępna'}</td>
+                                    <td>{book.availability ? 'Dostępna' : 'Niedostępna'}</td>
                                     <td>{book.stock}</td>
-                                    {/* Render if user is logged in and not admin */}
                                     <td>
                                         <div className="btn-container">
                                             <button
                                                 className="borrow-btn"
-                                                disabled={!book.isAvailable}
+                                                disabled={!book.availability}
                                                 onClick={() => handleReserve(book)}
                                             >
                                                 Wypożycz
@@ -108,7 +106,6 @@ function Catalog() {
                 ))}
             </div>
 
-            {/* Modal */}
             {modalVisible && (
                 <div id="reserveModal" className="modal">
                     <div className="modal-content">
@@ -127,3 +124,4 @@ function Catalog() {
 }
 
 export default Catalog;
+
