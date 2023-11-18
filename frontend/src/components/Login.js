@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import '../css/style.css';
 import logo from '../img/logo-with-slogan.svg';
 
@@ -7,16 +8,21 @@ function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [messages, setMessages] = useState([]);
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
         try {
-            const response = await axios.post('/api/login/', { email, password });
-            if (response.data.status === 'success') {
-                window.location.href = '/dashboard';
+            const response = await axios.post('http://localhost:8000/token/', { username: email, password });
+
+            if (response.data.access) {
+                localStorage.setItem('access_token', response.data.access);
+                localStorage.setItem('refresh_token', response.data.refresh);
+                axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.access}`;
+                navigate('/catalog');
             } else {
-                setMessages([response.data.message]);
+                setMessages(["Nie udało się zalogować. Spróbuj ponownie."]);
             }
         } catch (error) {
             setMessages(["Błąd podczas logowania. Spróbuj ponownie."]);
@@ -25,12 +31,7 @@ function Login() {
 
     return (
         <div>
-            <meta charset="UTF-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-            <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500&display=swap" rel="stylesheet" />
-            <link rel="preconnect" href="https://fonts.googleapis.com" />
-            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-
+            {/* Meta tags and other head elements should be moved to a higher level component like App.js */}
             <div className="login-container">
                 <img className="logo" src={logo} alt="combination mark logo" />
 
