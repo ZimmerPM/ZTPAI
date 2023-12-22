@@ -20,9 +20,9 @@ function Register() {
         }
 
         try {
-            const response = await axios.post('/api/register/', {
-                name,
-                lastname,
+            const response = await axios.post('http://localhost:8000/register/', {
+                first_name: name, // Zmieniono z 'name'
+                last_name: lastname, // Zmieniono z 'lastname'
                 email,
                 password
             });
