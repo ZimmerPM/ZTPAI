@@ -1,5 +1,6 @@
 .idea/
 backend/.idea/
 backend/ZTPAI/__pycache__/
-venv/ 
+venv/
+backend/media 
  

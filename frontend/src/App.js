@@ -6,6 +6,7 @@ import Home from './components/Home';
 import Login from './components/Login';
 import Register from './components/Register';
 import Catalog from './components/Catalog';
+import CatalogCopy from './components/Catalog-copy';
 import AdminPanel from './components/Admin-panel';
 import Loans from './components/Loans';
 import LoansArchive from './components/Loans-archive';
@@ -36,6 +37,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/catalog" element={<Catalog />} />
+          <Route path="/catalog-copy" element={<CatalogCopy/>} />
           <Route path="/admin-panel" element={<AdminPanel />} />
           <Route path="/loans" element={<Loans />} />
           <Route path="/loans-archive" element={<LoansArchive />} />
