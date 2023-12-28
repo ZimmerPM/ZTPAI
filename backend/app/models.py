@@ -7,7 +7,7 @@ class Author(models.Model):
 
 class Book(models.Model):
     title = models.CharField(max_length=100)
-    publication_year = models.IntegerField()
+    publicationYear = models.IntegerField()
     genre = models.CharField(max_length=50)
     availability = models.BooleanField(default=True)
     stock = models.IntegerField()
