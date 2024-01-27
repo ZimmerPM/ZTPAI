@@ -1,9 +1,12 @@
 from django.contrib import admin
+from .models import Author, Book, BookCopy, BorrowedBook, ReservedBook, ArchiveLoan, ISBN
 
-# Register your models here.
-from django.contrib import admin
-from .models import Book
-from .models import BookAuthor
-
+# Rejestracja modeli w panelu administracyjnym
+admin.site.register(Author)
 admin.site.register(Book)
-admin.site.register(BookAuthor)
+admin.site.register(BookCopy)
+admin.site.register(BorrowedBook)
+admin.site.register(ReservedBook)
+admin.site.register(ArchiveLoan)
+admin.site.register(ISBN)
+
