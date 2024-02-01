@@ -2,5 +2,5 @@
 backend/.idea/
 backend/ZTPAI/__pycache__/
 venv/
-backend/mediafrontend/node_modules/.cache
+backend/media/frontend/node_modules/.cache/
  
