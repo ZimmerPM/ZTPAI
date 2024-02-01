@@ -33,7 +33,7 @@ function Register() {
             // Obsługa odpowiedzi od serwera
             if (response.data.status === 'success') {
                 // Przekierowanie do strony logowania lub dashboardu
-                window.location.href = '/login';
+                window.location.href = '/';
             } else {
                 // Wyświetlanie wiadomości zwrotnej od serwera
                 setMessages([response.data.message]);
