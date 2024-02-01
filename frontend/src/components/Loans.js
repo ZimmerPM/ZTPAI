@@ -3,11 +3,11 @@ import axios from 'axios';
 import '../css/style.css';
 import '../css/table-styles.css';
 import '../css/modal-styles.css';
-import Header from './Header'; // Zakładając, że komponent nagłówka nazywa się Header
+import Header from './Header';
 
 function Loans() {
     const [loans, setLoans] = useState([]);
-    const [role, setRole] = useState(''); // Załóżmy, że role są przechowywane i zarządzane w stanie
+    const [role, setRole] = useState('');
     const [showReturnModal, setShowReturnModal] = useState(false);
     const [selectedLoan, setSelectedLoan] = useState(null);
 

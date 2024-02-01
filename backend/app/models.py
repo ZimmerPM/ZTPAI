@@ -43,7 +43,7 @@ class Author(models.Model):
         return self.name
 
 class ISBN(models.Model):
-    isbn_number = models.CharField(max_length=13, unique=True)
+    isbn_number = models.CharField(max_length=17, unique=True)
 
     # This __str__ method will be fine after Book model definition
     def __str__(self):
