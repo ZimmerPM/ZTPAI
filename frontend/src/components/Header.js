@@ -65,7 +65,7 @@ const Header = () => {
 
         {!user && (
           <>
-            <Link to="/login" className={`nav-button ${isActive('/login') ? 'active' : ''}`}>
+            <Link to="/" className={`nav-button ${isActive('/') ? 'active' : ''}`}>
               <i className="fa-solid fa-user-circle"></i> <span>Logowanie</span>
             </Link>
             <Link to="/register" className={`nav-button ${isActive('/register') ? 'active' : ''}`}>
