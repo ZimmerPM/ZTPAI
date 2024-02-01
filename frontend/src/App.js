@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './App.css';
+import { AuthProvider } from './AuthContext';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './components/Home';
 import Login from './components/Login';
@@ -29,7 +30,8 @@ function App() {
   }, []);
 
   return (
-    <Router>
+    <AuthProvider>
+      <Router>
       <div className="App">
         <Routes>
           <Route path="/" element={<Login />} />
@@ -47,6 +49,8 @@ function App() {
         </Routes>
       </div>
     </Router>
+    </AuthProvider>
+
   );
 }
 
