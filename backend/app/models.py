@@ -59,7 +59,7 @@ class Book(models.Model):
     genre = models.CharField(max_length=100)
     availability = models.BooleanField()
     stock = models.IntegerField()
-    image = models.CharField(max_length=255, null=True)
+    image = models.ImageField(upload_to='images/')
     authors = models.ManyToManyField(Author)
     isbn = models.OneToOneField(ISBN, on_delete=models.CASCADE, null=True, related_name='book')
 
