@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../AuthContext'; // Zaimportuj useAuth
 import '../css/style.css';
 import logo from '../img/logo-with-slogan.svg';
 
@@ -9,53 +9,47 @@ function Login() {
     const [password, setPassword] = useState('');
     const [messages, setMessages] = useState([]);
     const navigate = useNavigate();
+    const { login } = useAuth(); // Użyj useAuth do logowania użytkownika
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setMessages([]); // Wyczyść błędy przed nową próbą logowania
 
         try {
-            const response = await axios.post('http://localhost:8000/token/', { username: email, password });
-
-            if (response.data.access) {
-                localStorage.setItem('access_token', response.data.access);
-                localStorage.setItem('refresh_token', response.data.refresh);
-                axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.access}`;
-                navigate('/catalog');
-            } else {
-                setMessages(["Nie udało się zalogować. Spróbuj ponownie."]);
-            }
+            // Użyj funkcji login z AuthContext do logowania użytkownika
+            await login(email, password);
+            // Przekierowanie do strony katalogu
+            navigate('/catalog');
         } catch (error) {
-            setMessages(["Błąd podczas logowania. Spróbuj ponownie."]);
+            // W przypadku błędu, wyświetl komunikat
+            setMessages(["Nie udało się zalogować. Spróbuj ponownie."]);
+            console.error("Błąd logowania:", error);
         }
     };
 
     return (
-        <div>
-            {/* Meta tags and other head elements should be moved to a higher level component like App.js */}
-            <div className="login-container">
-                <img className="logo" src={logo} alt="combination mark logo" />
-
-                <form onSubmit={handleSubmit}>
-                    <div className="messages">
-                        {messages.map((message, index) => <div key={index}>{message}</div>)}
-                    </div>
-                    <input
-                        type="text"
-                        placeholder="e-mail"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <input
-                        type="password"
-                        placeholder="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <button type="submit">zaloguj</button>
-                    <a href="/register" className="register-link">Nie masz konta? Zarejestruj się!</a>
-                    <a href="/catalog" className="register-link">Przeglądaj katalog jako Gość</a>
-                </form>
-            </div>
+        <div className="login-container">
+            <img className="logo" src={logo} alt="combination mark logo" />
+            <form onSubmit={handleSubmit}>
+                <div className="messages">
+                    {messages.map((message, index) => <div key={index}>{message}</div>)}
+                </div>
+                <input
+                    type="text"
+                    placeholder="e-mail"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+                <input
+                    type="password"
+                    placeholder="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+                <button type="submit">zaloguj</button>
+                <a href="/register" className="register-link">Nie masz konta? Zarejestruj się!</a>
+                <a href="/catalog" className="register-link">Przeglądaj katalog jako Gość</a>
+            </form>
         </div>
     );
 }

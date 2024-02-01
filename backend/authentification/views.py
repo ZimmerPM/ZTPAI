@@ -11,15 +11,12 @@ from rest_framework.decorators import api_view, permission_classes
 from drf_yasg.utils import swagger_auto_schema
 
 
-
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_user_info(request):
     user = request.user
     user_data = UserSerializer(user).data
     return Response(user_data)
-
-
 
 class HomeView(APIView):
     permission_classes = (IsAuthenticated,)

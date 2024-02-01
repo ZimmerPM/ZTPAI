@@ -1,36 +1,47 @@
-import React, {useEffect }from 'react';
-import { Link, useLocation } from 'react-router-dom';
+// Header.js
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../AuthContext'; // Upewnij się, że ścieżka jest prawidłowa
 import logo from '../img/logo.svg';
+import '../css/style.css'; // Zaimportowane style CSS
 
-const Header = ({ user }) => {
-  const location = useLocation();
+const Header = () => {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://kit.fontawesome.com/faceb1bdbd.js';
-    script.crossOrigin = 'anonymous';
-    document.body.appendChild(script);
+    // Załaduj skrypt fontawesome tylko jeśli nie jest już załadowany
+    if (!document.querySelector('script[src="https://kit.fontawesome.com/faceb1bdbd.js"]')) {
+      const script = document.createElement('script');
+      script.src = 'https://kit.fontawesome.com/faceb1bdbd.js';
+      script.crossOrigin = 'anonymous';
+      document.body.appendChild(script);
+    }
   }, []);
 
+  const isActive = (path) => window.location.pathname === path;
 
-  const isActive = (path) => location.pathname === path;
+  const handleLogout = () => {
+    logout();
+    navigate('/'); // Przekierowanie do strony logowania po wylogowaniu
+  };
 
   return (
     <>
       <div className="top-bar">
-       <img className="logo" src={logo} alt="mark logo" />
+        <img className="logo" src={logo} alt="Logo LibrApp" />
         <span className="user-info">
-          {user ? `${user.name} ${user.lastname}` : 'Przeglądasz jako Gość'}
+          {user ? `${user.firstName} ${user.lastName}` : 'Przeglądasz jako Gość'}
         </span>
       </div>
-
       <nav>
         <Link to="/catalog" className={`nav-button ${isActive('/catalog') ? 'active' : ''}`}>
           <i className="fa-solid fa-list"></i> <span>Katalog</span>
         </Link>
 
-        {user && user.role === 'admin' && (
-          <Link to="/adminPanel" className={`admin-panel-button ${isActive('/adminPanel') || isActive('/usersManagement') ? 'active' : ''}`}>
+        {/* Umieszczamy przycisk "Panel administracyjny" za przyciskiem "Katalog" */}
+        {user && user.isStaff && (
+          <Link to="/adminPanel" className={`admin-panel-button ${isActive('/adminPanel') ? 'active' : ''}`}>
             <i className="fa-solid fa-cog"></i> <span>Panel administracyjny</span>
           </Link>
         )}
@@ -40,18 +51,15 @@ const Header = ({ user }) => {
             <Link to="/reservations" className={`nav-button ${isActive('/reservations') ? 'active' : ''}`}>
               <i className="fa-regular fa-calendar-check"></i> <span>Rezerwacje</span>
             </Link>
-
-            <Link to="/loans" className={`nav-button ${isActive('/loans') || isActive('/loansArchive') ? 'active' : ''}`}>
+            <Link to="/loans" className={`nav-button ${isActive('/loans') ? 'active' : ''}`}>
               <i className="fa-solid fa-book-open"></i> <span>Wypożyczenia</span>
             </Link>
-
             <Link to="/profile" className={`nav-button ${isActive('/profile') ? 'active' : ''}`}>
               <i className="fa-solid fa-user"></i> <span>Moje konto</span>
             </Link>
-
-            <Link to="/logout" className="nav-button">
+            <button onClick={handleLogout} className="nav-button">
               <i className="fa-solid fa-arrow-right-from-bracket"></i> <span>Wyloguj</span>
-            </Link>
+            </button>
           </>
         )}
 

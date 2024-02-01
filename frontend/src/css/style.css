@@ -56,6 +56,7 @@ input, button {
     text-align: center;
     font-family: 'Poppins', sans-serif;
     line-height: 2em;
+    font-size: 1.1em;
     letter-spacing: 0.25em;
     border: none;
     box-sizing: content-box;
@@ -231,7 +232,7 @@ nav {
     color: #9F7E69; /* Używam jednego z kolorów już istniejących w twoim arkuszu stylów */
     text-decoration: none;
     font-family: 'Poppins', sans-serif;
-    font-size: 0.9em;
+    font-size: 1.1em;
     text-align: center;
     border: 1px solid #9F7E69;
     padding: 0.5em;
