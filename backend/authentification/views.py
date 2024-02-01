@@ -9,6 +9,8 @@ from django.shortcuts import render
 from .serializers import UserSerializer, UserRegistrationSerializer
 from rest_framework.decorators import api_view, permission_classes
 from drf_yasg.utils import swagger_auto_schema
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.hashers import check_password
 
 
 @api_view(['GET'])
@@ -81,3 +83,21 @@ class RegisterView(APIView):
             return Response({'status': 'success', 'message': 'User created successfully.'}, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ChangePasswordView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        old_password = request.data.get('old_password')
+        new_password = request.data.get('new_password')
+
+        if not user.check_password(old_password):
+            return Response({'detail': 'Nieprawidłowe aktualne hasło.'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+        user.set_password(new_password)
+        user.save()
+        update_session_auth_hash(request, user)
+
+        return Response({'detail': 'Hasło zostało pomyślnie zmienione.'}, status=status.HTTP_200_OK)
