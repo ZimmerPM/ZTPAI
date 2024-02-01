@@ -14,32 +14,39 @@ function Register() {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
+        // Sprawdzanie, czy hasła się zgadzają
         if(password !== confirmPassword) {
             setMessages(["Hasła się nie zgadzają."]);
             return;
         }
 
         try {
+            // Wysyłanie żądania POST do serwera z odpowiednimi danymi
             const response = await axios.post('http://localhost:8000/register/', {
-                first_name: name, // Zmieniono z 'name'
-                last_name: lastname, // Zmieniono z 'lastname'
-                email,
-                password
+                first_name: name,
+                last_name: lastname,
+                email: email,
+                password: password,
+                password_confirmation: confirmPassword,
             });
+
+            // Obsługa odpowiedzi od serwera
             if (response.data.status === 'success') {
-                // Redirect to login or dashboard as appropriate
+                // Przekierowanie do strony logowania lub dashboardu
                 window.location.href = '/login';
             } else {
+                // Wyświetlanie wiadomości zwrotnej od serwera
                 setMessages([response.data.message]);
             }
         } catch (error) {
+            // Obsługa błędów, np. problemów z połączeniem
             setMessages(["Błąd podczas rejestracji. Spróbuj ponownie."]);
         }
     };
 
     return (
         <div className="register-container">
-            <img className="logo" src={logo} alt="combination mark logo" />
+            <img className="logo" src={logo} alt="Logo z hasłem" />
             <form onSubmit={handleSubmit}>
                 <div className="messages">
                     {messages.map((message, index) => (
@@ -48,35 +55,35 @@ function Register() {
                 </div>
                 <input
                     type="text"
-                    placeholder="imię"
+                    placeholder="Imię"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                 />
                 <input
                     type="text"
-                    placeholder="nazwisko"
+                    placeholder="Nazwisko"
                     value={lastname}
                     onChange={(e) => setLastname(e.target.value)}
                 />
                 <input
-                    type="text"
-                    placeholder="e-mail"
+                    type="email" // Ustawienie typu na email dla walidacji po stronie klienta
+                    placeholder="E-mail"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                 />
                 <input
                     type="password"
-                    placeholder="hasło"
+                    placeholder="Hasło"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
                 <input
                     type="password"
-                    placeholder="potwierdź hasło"
+                    placeholder="Potwierdź hasło"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                 />
-                <button type="submit">zarejestruj</button>
+                <button type="submit">Zarejestruj</button>
             </form>
         </div>
     );
