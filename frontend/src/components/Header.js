@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 import logo from '../img/logo.svg';
-import '../css/style.css'; // Zaimportowane style CSS
+import '../css/style.css';
 
 const Header = () => {
   const { user, logout } = useAuth();
@@ -47,12 +47,6 @@ const Header = () => {
 
         {user && (
           <>
-            <Link to="/reservations" className={`nav-button ${isActive('/reservations') ? 'active' : ''}`}>
-              <i className="fa-regular fa-calendar-check"></i> <span>Rezerwacje</span>
-            </Link>
-            <Link to="/loans" className={`nav-button ${isActive('/loans') ? 'active' : ''}`}>
-              <i className="fa-solid fa-book-open"></i> <span>Wypożyczenia</span>
-            </Link>
             <Link to="/profile" className={`nav-button ${isActive('/profile') ? 'active' : ''}`}>
               <i className="fa-solid fa-user"></i> <span>Moje konto</span>
             </Link>

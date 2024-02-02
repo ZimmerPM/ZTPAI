@@ -4,8 +4,6 @@ from .views import *
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
-     path('home/', views.HomeView.as_view(), name ='home'),
-     path('api_login/', LoginView.as_view(), name='login_api'),
      path('login/', login_page, name='login_page'),
 
      # Simple JWT

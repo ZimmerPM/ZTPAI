@@ -82,14 +82,14 @@ function Catalog() {
                             <th>Rok wydania</th>
                             <th>Gatunek</th>
                             <th>ISBN</th>
-                            <th>Liczba dostępnych egzemplarzy</th>
+                            <th>Liczba dostępnych kopii</th>
                             <th>Akcja</th>
                         </tr>
                     </thead>
                 </table>
             </div>
 
-            <div className="books-container">
+            <div className="books-container" id="common-catalog">
                 {filteredBooks.map((book) => (
                     <div className="book-entry" key={book.id} data-id={book.id}>
                         <div className="book-cover">

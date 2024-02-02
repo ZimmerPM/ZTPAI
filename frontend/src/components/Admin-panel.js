@@ -39,19 +39,19 @@ function AdminPanel() {
     }
   };
 
-  const handleSearch = () => {
-    if (searchTerm === '') {
-      setFilteredBooks(books);
-    } else {
-      const filtered = books.filter(book =>
-        book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        book.authors.some(author => author.toLowerCase().includes(searchTerm.toLowerCase())) ||
-        book.genre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        book.isbn.includes(searchTerm)
-      );
-      setFilteredBooks(filtered);
-    }
-  };
+const handleSearch = () => {
+  if (searchTerm === '') {
+    setFilteredBooks(books);
+  } else {
+    const filtered = books.filter(book =>
+      book.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      book.authors.some(author => author?.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      book.genre?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      book.isbn?.includes(searchTerm)
+    );
+    setFilteredBooks(filtered);
+  }
+};
 
   const handleChange = (e, index) => {
     const { name, value, files } = e.target;
@@ -158,7 +158,6 @@ function AdminPanel() {
       <div className="admin-panel">
         <div className="admin-head-container">
           <div className="admin-button-container">
-            <a href="/usersManagement" className="users-management-link">Zarządzanie użytkownikami</a>
             <button className="add-button" onClick={() => { setShowAddBookModal(true); setCurrentBook(null); setNewBook({ title: '', authors: [''], publicationYear: '', genre: '', isbn: '', stock: '', image: null }); }}>Dodaj pozycję do katalogu</button>
              <button className="add-button" onClick={() => setShowAddAuthorModal(true)}>Dodaj autora do bazy</button>
           </div>
@@ -175,13 +174,31 @@ function AdminPanel() {
           </div>
         </div>
 
+         <div className="header-container">
+                <div className="empty-field"></div>
+                <table className="catalog-table" id="admin-catalog">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tytuł</th>
+                            <th>Autorzy</th>
+                            <th>Rok wydania</th>
+                            <th>Gatunek</th>
+                            <th>ISBN</th>
+                            <th>Liczba dostępnych kopii</th>
+                            <th>Akcja</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+
         <div className="books-container">
           {filteredBooks.map((book, index) => (
             <div className="book-entry" key={book.id}>
               <div className="book-cover">
                 <img src={book.image} alt={book.title} />
               </div>
-              <table className="catalog-table">
+              <table className="catalog-table" id="admin-catalog">
                 <tbody>
                   <tr className={index % 2 === 0 ? 'even-row' : 'odd-row'}>
                     <td>{book.id}</td>
@@ -193,7 +210,6 @@ function AdminPanel() {
                     <td>{book.stock}</td>
                     <td>
                       <div className="btn-container">
-                        <button className="edit-btn" onClick={() => setShowEditBookModal(true)}>Edytuj</button>
                         <button className="delete-btn" onClick={() => handleDeleteBook(book.id)}>Usuń</button>
                       </div>
                     </td>
@@ -318,9 +334,6 @@ function AdminPanel() {
       </div>
     </>
   );
-
-
-
 
 
 }

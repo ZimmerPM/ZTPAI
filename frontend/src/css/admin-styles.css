@@ -41,6 +41,7 @@ input.file-upload{
 
 .add-button, .users-management-link {
     padding: 0.5em 1.5em;
+    margin-top: 3em;
     font-family: "Comfortaa", cursive;
     background-color: #5b5b62;
     color: #f2efc7;

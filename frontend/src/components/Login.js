@@ -48,7 +48,6 @@ function Login() {
                 />
                 <button type="submit">zaloguj</button>
                 <a href="/register" className="register-link">Nie masz konta? Zarejestruj się!</a>
-                <a href="/catalog" className="register-link">Przeglądaj katalog jako Gość</a>
             </form>
         </div>
     );
