@@ -11,6 +11,8 @@ function AdminPanel() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredBooks, setFilteredBooks] = useState([]);
   const [showAddBookModal, setShowAddBookModal] = useState(false);
+  const [showEditBookModal, setShowEditBookModal] = useState(false);
+  const [currentBook, setCurrentBook] = useState(null);
   const [newBook, setNewBook] = useState({
     title: '',
     authors: [''],
@@ -20,6 +22,8 @@ function AdminPanel() {
     stock: '',
     image: null
   });
+  const [showAddAuthorModal, setShowAddAuthorModal] = useState(false);
+  const [authorName, setAuthorName] = useState('');
 
   useEffect(() => {
     fetchBooks();
@@ -62,6 +66,23 @@ function AdminPanel() {
     }
   };
 
+
+  const handleAddAuthorSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:8000/app/authors/', { name: authorName });
+      if (response.status === 201) {
+        setShowAddAuthorModal(false);
+        setAuthorName('');
+        // Możesz dodać odświeżenie listy autorów lub inny sposób na potwierdzenie dodania
+      } else {
+        console.error('Failed to add author');
+      }
+    } catch (error) {
+      console.error('Error adding author', error);
+    }
+  };
+
   const handleAddAuthor = () => {
     setNewBook({ ...newBook, authors: [...newBook.authors, ''] });
   };
@@ -74,37 +95,58 @@ function AdminPanel() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const formData = new FormData();
-    formData.append('title', newBook.title);
-    newBook.authors.forEach(author => formData.append('authors', author));
-    formData.append('publicationYear', newBook.publicationYear);
-    formData.append('genre', newBook.genre);
-    formData.append('isbn', newBook.isbn);
-    formData.append('stock', newBook.stock);
-    if (newBook.image) formData.append('image', newBook.image);
+    Object.keys(newBook).forEach(key => {
+      if (key === 'authors') {
+        newBook[key].forEach(author => formData.append(key, author));
+      } else if (key !== 'image' || newBook[key]) {
+        formData.append(key, newBook[key]);
+      }
+    });
 
     try {
-      const response = await axios.post('http://localhost:8000/app/addBook/', formData, {
+      const url = currentBook ? `http://localhost:8000/app/books/update/${currentBook.id}/` : 'http://localhost:8000/app/addBook/';
+      const method = currentBook ? 'put' : 'post';
+
+      const response = await axios({
+        method,
+        url,
+        data: formData,
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
-      if (response.status === 200 || response.status === 201) {
+
+      if ([200, 201].includes(response.status)) {
         setShowAddBookModal(false);
+        setShowEditBookModal(false);
         fetchBooks();
       } else {
-        console.error('Failed to add book');
+        console.error('Failed to process book');
       }
     } catch (error) {
-      console.error('Error adding book', error);
+      console.error('Error processing book', error);
     }
+  };
+
+  const handleEditClick = (book) => {
+    setCurrentBook(book);
+    setNewBook({
+      title: book.title,
+      authors: book.authors,
+      publicationYear: book.publicationYear,
+      genre: book.genre,
+      isbn: book.isbn,
+      stock: book.stock,
+      image: null
+    });
+    setShowEditBookModal(true);
   };
 
   const handleDeleteBook = async (bookId) => {
     try {
       await axios.delete(`http://localhost:8000/app/books/delete/${bookId}/`);
-      fetchBooks(); // Odśwież listę książek po usunięciu
+      fetchBooks();
     } catch (error) {
       console.error('Error deleting book', error);
     }
@@ -117,7 +159,8 @@ function AdminPanel() {
         <div className="admin-head-container">
           <div className="admin-button-container">
             <a href="/usersManagement" className="users-management-link">Zarządzanie użytkownikami</a>
-            <button className="add-button" onClick={() => setShowAddBookModal(true)}>Dodaj pozycję do katalogu</button>
+            <button className="add-button" onClick={() => { setShowAddBookModal(true); setCurrentBook(null); setNewBook({ title: '', authors: [''], publicationYear: '', genre: '', isbn: '', stock: '', image: null }); }}>Dodaj pozycję do katalogu</button>
+             <button className="add-button" onClick={() => setShowAddAuthorModal(true)}>Dodaj autora do bazy</button>
           </div>
           <div className="search-container">
             <input
@@ -150,8 +193,8 @@ function AdminPanel() {
                     <td>{book.stock}</td>
                     <td>
                       <div className="btn-container">
-                        <button className="edit-btn">Edytuj</button>
-                         <button className="delete-btn" onClick={() => handleDeleteBook(book.id)}>Usuń</button>
+                        <button className="edit-btn" onClick={() => setShowEditBookModal(true)}>Edytuj</button>
+                        <button className="delete-btn" onClick={() => handleDeleteBook(book.id)}>Usuń</button>
                       </div>
                     </td>
                   </tr>
@@ -161,11 +204,23 @@ function AdminPanel() {
           ))}
         </div>
 
+        {showAddAuthorModal && (
+          <div className="modal" id="addAuthorModal">
+            <div className="modal-content">
+              <span className="close-button" onClick={() => setShowAddAuthorModal(false)}>&times;</span>
+              <h2>Dodaj nowego autora</h2>
+              <form onSubmit={handleAddAuthorSubmit}>
+                <input type="text" placeholder="Nazwisko autora" value={authorName} onChange={(e) => setAuthorName(e.target.value)} required />
+                <button type="submit">Dodaj autora</button>
+              </form>
+            </div>
+          </div>
+        )}
         {showAddBookModal && (
           <div className="modal" id="addBookModal">
             <div className="modal-content">
               <span className="close-button" onClick={() => setShowAddBookModal(false)}>&times;</span>
-              <h2>Dodaj nową książkę</h2>
+              <h2>{currentBook ? 'Edytuj książkę' : 'Dodaj nową książkę'}</h2>
               <form onSubmit={handleSubmit}>
                 <input name="title" type="text" placeholder="Tytuł" value={newBook.title} onChange={handleChange} required />
                 {newBook.authors.map((author, index) => (
@@ -180,14 +235,94 @@ function AdminPanel() {
                 <input name="isbn" type="text" placeholder="ISBN" value={newBook.isbn} onChange={handleChange} required />
                 <input name="stock" type="number" placeholder="Liczba egzemplarzy" value={newBook.stock} onChange={handleChange} required />
                 <input name="image" type="file" onChange={handleChange} />
-                <button type="submit">Dodaj książkę</button>
+                <button type="submit">{currentBook ? 'Zaktualizuj książkę' : 'Dodaj książkę'}</button>
               </form>
             </div>
           </div>
         )}
+
+          {showEditBookModal && (
+  <div className="modal" id="editBookModal">
+    <div className="modal-content">
+      <span className="close-button" onClick={() => setShowEditBookModal(false)}>&times;</span>
+      <h2>Edytuj książkę</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          name="title"
+          type="text"
+          placeholder="Tytuł"
+          value={newBook.title}
+          onChange={(e) => handleChange(e)}
+          required
+        />
+        {newBook.authors.map((author, index) => (
+          <div key={index}>
+            <input
+              name="authors"
+              type="text"
+              placeholder={`Autor ${index + 1}`}
+              value={author}
+              onChange={(e) => handleChange(e, index)}
+              required
+            />
+            <button type="button" onClick={() => handleRemoveAuthor(index)}>
+              Usuń autora
+            </button>
+          </div>
+        ))}
+        <button type="button" onClick={handleAddAuthor}>
+          Dodaj kolejnego autora
+        </button>
+        <input
+          name="publicationYear"
+          type="text"
+          placeholder="Rok wydania"
+          value={newBook.publicationYear}
+          onChange={(e) => handleChange(e)}
+          required
+        />
+        <input
+          name="genre"
+          type="text"
+          placeholder="Gatunek"
+          value={newBook.genre}
+          onChange={(e) => handleChange(e)}
+          required
+        />
+        <input
+          name="isbn"
+          type="text"
+          placeholder="ISBN"
+          value={newBook.isbn}
+          onChange={(e) => handleChange(e)}
+          required
+        />
+        <input
+          name="stock"
+          type="number"
+          placeholder="Liczba egzemplarzy"
+          value={newBook.stock}
+          onChange={(e) => handleChange(e)}
+          required
+        />
+        <input
+          name="image"
+          type="file"
+          onChange={(e) => handleChange(e)}
+        />
+        <button type="submit">Zaktualizuj książkę</button>
+      </form>
+    </div>
+  </div>
+)}
       </div>
     </>
   );
+
+
+
+
+
 }
 
 export default AdminPanel;

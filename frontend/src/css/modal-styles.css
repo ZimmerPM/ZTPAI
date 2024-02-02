@@ -1,4 +1,4 @@
-#passwordModal, #addBookModal{
+#passwordModal, #addBookModal, #addAuthorModal{
     position: fixed;
     top: 0;
     left: 0;

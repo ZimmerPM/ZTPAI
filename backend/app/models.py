@@ -47,11 +47,9 @@ class ISBN(models.Model):
 
     # This __str__ method will be fine after Book model definition
     def __str__(self):
-        # We'll add a try-except block to handle the case when the ISBN has no related book yet
-        try:
-            return f"{self.isbn_number} - {self.book.title}"
-        except Book.DoesNotExist:
-            return f"{self.isbn_number} - No linked book"
+            return f"{self.isbn_number}"
+
+
 
 class Book(models.Model):
     title = models.CharField(max_length=255)
