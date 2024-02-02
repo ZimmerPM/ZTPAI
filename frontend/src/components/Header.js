@@ -39,9 +39,8 @@ const Header = () => {
           <i className="fa-solid fa-list"></i> <span>Katalog</span>
         </Link>
 
-        {/* Umieszczamy przycisk "Panel administracyjny" za przyciskiem "Katalog" */}
         {user && user.isStaff && (
-          <Link to="/adminPanel" className={`admin-panel-button ${isActive('/adminPanel') ? 'active' : ''}`}>
+          <Link to="/admin-panel" className={`admin-panel-button ${isActive('/admin-panel') ? 'active' : ''}`}>
             <i className="fa-solid fa-cog"></i> <span>Panel administracyjny</span>
           </Link>
         )}
