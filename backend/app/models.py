@@ -57,7 +57,6 @@ class Book(models.Model):
     title = models.CharField(max_length=255)
     publicationYear = models.IntegerField()
     genre = models.CharField(max_length=100)
-    availability = models.BooleanField()
     stock = models.IntegerField()
     image = models.ImageField(upload_to='images/')
     authors = models.ManyToManyField(Author)
