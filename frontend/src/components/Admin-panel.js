@@ -101,6 +101,15 @@ function AdminPanel() {
     }
   };
 
+  const handleDeleteBook = async (bookId) => {
+    try {
+      await axios.delete(`http://localhost:8000/app/books/delete/${bookId}/`);
+      fetchBooks(); // Odśwież listę książek po usunięciu
+    } catch (error) {
+      console.error('Error deleting book', error);
+    }
+  };
+
   return (
     <>
       <Header />
@@ -142,7 +151,7 @@ function AdminPanel() {
                     <td>
                       <div className="btn-container">
                         <button className="edit-btn">Edytuj</button>
-                        <button className="delete-btn">Usuń</button>
+                         <button className="delete-btn" onClick={() => handleDeleteBook(book.id)}>Usuń</button>
                       </div>
                     </td>
                   </tr>
@@ -153,7 +162,7 @@ function AdminPanel() {
         </div>
 
         {showAddBookModal && (
-          <div className="modal">
+          <div className="modal" id="addBookModal">
             <div className="modal-content">
               <span className="close-button" onClick={() => setShowAddBookModal(false)}>&times;</span>
               <h2>Dodaj nową książkę</h2>

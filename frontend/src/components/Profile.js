@@ -81,7 +81,7 @@ function Profile() {
                 </div>
 
                 {passwordModalVisible && (
-                    <div className="modal">
+                    <div className="modal" id="passwordModal">
                         <div className="modal-content">
                             <span className="close-button" onClick={() => setPasswordModalVisible(false)}>&times;</span>
                             <h2>Zmień hasło</h2>
