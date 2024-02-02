@@ -4,8 +4,10 @@ import '../css/style.css';
 import '../css/table-styles.css';
 import '../css/modal-styles.css';
 import Header from './Header';
+import { useAuth } from '../AuthContext';
 
 function Catalog() {
+    const { user } = useAuth();
     const [books, setBooks] = useState([]); // Lista wszystkich książek
     const [filteredBooks, setFilteredBooks] = useState([]); // Lista książek do wyświetlenia po filtracji
     const [searchTerm, setSearchTerm] = useState('');
@@ -106,7 +108,7 @@ function Catalog() {
                                         <div className="btn-container">
                                             <button
                                                 className="borrow-btn"
-                                                disabled={book.stock === 0}
+                                                disabled={book.stock === 0 || (user && user.isStaff)}
                                                 onClick={() => handleReserve(book)}
                                             >
                                                 Wypożycz

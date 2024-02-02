@@ -1,7 +1,7 @@
 // Header.js
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../AuthContext'; // Upewnij się, że ścieżka jest prawidłowa
+import { useAuth } from '../AuthContext';
 import logo from '../img/logo.svg';
 import '../css/style.css'; // Zaimportowane style CSS
 
