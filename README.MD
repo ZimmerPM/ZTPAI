@@ -4,19 +4,19 @@ LibraApp to aplikacja służąca do zarządzania zbiorami bibliotecznymi. Umożl
 
 ## Widoki aplikacji
 
-![Widok logowania aplikacji](/readme-pics/login.jpg "Widok logowania aplikacji")
+![Widok logowania aplikacji](/readme-pics/login.JPG "Widok logowania aplikacji")
 
-![Widok logowania aplikacji- wersja mobilna](/readme-pics/login-mobile.jpg "Widok logowania aplikacji - wersja mobilna")
+![Widok logowania aplikacji- wersja mobilna](/readme-pics/login-mobile.JPG "Widok logowania aplikacji - wersja mobilna")
 
-![Widok rejestracji użytkownika](/readme-pics/register.jpg "Widok rejestracji użytkownika")
+![Widok rejestracji użytkownika](/readme-pics/register.JPG"Widok rejestracji użytkownika")
 
-![Widok rejestracji użytkownika -wersja mobilna](/readme-pics/register-mobile.jpg "Widok rejestracji użytkownika - wersja mobilna")
+![Widok rejestracji użytkownika -wersja mobilna](/readme-pics/register-mobile.JPG "Widok rejestracji użytkownika - wersja mobilna")
 
-![Widok katalogu książek](/readme-pics/catalog.jpg "Widok katalogu książek")
+![Widok katalogu książek](/readme-pics/catalog.JPG "Widok katalogu książek")
 
-![Widok katalogu książek - wersja mobilna](/readme-pics/catgalog-mobile.jpg "Widok katalogu książek - wersja mobilna")
+![Widok katalogu książek - wersja mobilna](/readme-pics/catgalog-mobile.JPG "Widok katalogu książek - wersja mobilna")
 
-![Dokumentacja Swaggera](/readme-pics/swagger.jpg "Dokumentacja Swaggera") 
+![Dokumentacja Swaggera](/readme-pics/swagger.JPG "Dokumentacja Swaggera") 
 
 ## Technologie
 
