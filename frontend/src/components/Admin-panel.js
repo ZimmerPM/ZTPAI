@@ -16,7 +16,7 @@ function AdminPanel() {
       try {
         const response = await axios.get('http://localhost:8000/app/books/');
         setBooks(response.data || []);
-        setFilteredBooks(response.data || []); // Ustawiamy również początkową listę filtrowanych książek
+        setFilteredBooks(response.data || []);
       } catch (error) {
         console.error('Error fetching books', error);
       }
@@ -31,7 +31,7 @@ function AdminPanel() {
     } else {
       const filtered = books.filter(book => {
         const titleMatch = book.title ? book.title.toLowerCase().includes(searchTerm.toLowerCase()) : false;
-        const authorsMatch = book.authors ? book.authors.some(author => author.name.toLowerCase().includes(searchTerm.toLowerCase())) : false;
+        const authorsMatch = book.authors ? book.authors.some(author => author && author.toLowerCase().includes(searchTerm.toLowerCase())) : false;
         const genreMatch = book.genre ? book.genre.toLowerCase().includes(searchTerm.toLowerCase()) : false;
         const isbnMatch = book.isbn ? book.isbn.includes(searchTerm) : false;
         return titleMatch || authorsMatch || genreMatch || isbnMatch;
@@ -50,31 +50,20 @@ function AdminPanel() {
             <button className="add-button">Dodaj pozycję do katalogu</button>
           </div>
           <div className="search-container">
-            <input type="text" className="search-input" placeholder="Wyszukaj..."/>
-            <button className="search-button">Szukaj</button>
+            <input
+              type="text"
+              className="search-input"
+              placeholder="Wyszukaj..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyPress={(e) => { if (e.key === 'Enter') { handleSearch(); } }}
+            />
+            <button className="search-button" onClick={handleSearch}>Szukaj</button>
           </div>
         </div>
 
-        <div className="header-container">
-          <div className="empty-field"></div>
-          <table className="catalog-table" id="admin-catalog">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Tytuł</th>
-                <th>Autorzy</th>
-                <th>Rok wydania</th>
-                <th>Gatunek</th>
-                <th>ISBN</th>
-                <th>Liczba dostępnych egzemplarzy</th>
-                <th>Akcja</th>
-              </tr>
-            </thead>
-          </table>
-        </div>
-
         <div className="books-container">
-          {books.map((book, index) => (
+          {filteredBooks.map((book, index) => (
             <div className="book-entry" key={book.id}>
               <div className="book-cover">
                 <img src={book.image} alt={book.title} />
