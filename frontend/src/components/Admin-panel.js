@@ -8,12 +8,15 @@ import Header from './Header';
 
 function AdminPanel() {
   const [books, setBooks] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredBooks, setFilteredBooks] = useState([]);
 
   useEffect(() => {
     const fetchBooks = async () => {
       try {
         const response = await axios.get('http://localhost:8000/app/books/');
         setBooks(response.data || []);
+        setFilteredBooks(response.data || []); // Ustawiamy również początkową listę filtrowanych książek
       } catch (error) {
         console.error('Error fetching books', error);
       }
@@ -21,6 +24,21 @@ function AdminPanel() {
 
     fetchBooks();
   }, []);
+
+  const handleSearch = () => {
+    if (searchTerm === '') {
+      setFilteredBooks(books);
+    } else {
+      const filtered = books.filter(book => {
+        const titleMatch = book.title ? book.title.toLowerCase().includes(searchTerm.toLowerCase()) : false;
+        const authorsMatch = book.authors ? book.authors.some(author => author.name.toLowerCase().includes(searchTerm.toLowerCase())) : false;
+        const genreMatch = book.genre ? book.genre.toLowerCase().includes(searchTerm.toLowerCase()) : false;
+        const isbnMatch = book.isbn ? book.isbn.includes(searchTerm) : false;
+        return titleMatch || authorsMatch || genreMatch || isbnMatch;
+      });
+      setFilteredBooks(filtered);
+    }
+  };
 
   return (
     <>
